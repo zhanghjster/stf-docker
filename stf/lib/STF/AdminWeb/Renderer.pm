@@ -1,7 +1,7 @@
 package STF::AdminWeb::Renderer;
 use Mojo::Base 'Mojolicious::Renderer';
 use File::Spec ();
-use Mojo::Loader;
+use Mojo::Loader qw(data_section);
 use Text::Xslate ();
 
 has 'xslate';
@@ -27,7 +27,7 @@ sub _init {
             $cache_dir = $app->home->rel_dir('tmp/compiled_templates');
         }
 
-        push @$path, Mojo::Loader->new->data(
+        push @$path,data_section(
             $app->renderer->classes->[0],
         );
     } else {

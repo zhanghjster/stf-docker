@@ -3,7 +3,8 @@ use Mojo::Base 'STF::AdminWeb::Controller';
 
 sub load_cluster {
     my ($self) = @_;
-    my $cluster_id = $self->match->captures->{object_id};
+    #my $cluster_id = $self->match->captures->{object_id};
+    my $cluster_id = $self->param('object_id');
     my $cluster = $self->get('API::StorageCluster')->lookup( $cluster_id );
     if (! $cluster) {
         return;

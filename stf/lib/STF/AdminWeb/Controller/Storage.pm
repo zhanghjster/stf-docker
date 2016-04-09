@@ -21,7 +21,9 @@ sub api_list {
 
 sub load_storage {
     my ($self) = @_;
-    my $storage_id = $self->match->captures->{object_id};
+    #my $storage_id = $self->match->captures->{object_id};
+    my $storate_id = $self->param('object_id');
+
     my $storage = $self->get('API::Storage')->lookup( $storage_id );
     if (! $storage) {
         return;

@@ -4,7 +4,8 @@ use Mojo::Base 'STF::AdminWeb::Controller';
 sub load_object {
     my ($self, $object_id) = @_;
 
-    $object_id ||= $self->match->captures->{object_id};
+    #$object_id ||= $self->match->captures->{object_id};
+    $object_id ||= $self->param('object_id');
     if ($object_id =~ /\D/) {
         # resolve bucket/path/to/object to object id
         $object_id = $self->resolve_public_name($object_id);
