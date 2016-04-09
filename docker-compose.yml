@@ -1,0 +1,37 @@
+stf:
+  image: 'stf'
+  ports:
+    - "9000:9000"
+  volumes:
+    - ./stf:/stf
+  container_name: 'stf'
+  links:
+    - stf_mysql:mysqlhost
+    - stf_redis:redishost
+  environment:
+    - STF_QUEUE_TYPE=Redis
+    - STF_REDIS_HOSTPORT=redishost:6379
+    - STF_HOST_ID=1
+    - STF_HOME=/stf
+    - USE_PLACK_REPROXY=1
+    - STF_DEBUG=1
+    - STF_MYSQL_DSN=dbi:mysql:dbname=stf:mysqlhost:3306
+    - STF_MYSQL_USERNAME=root
+    - STF_MYSQL_PASSWORD=123456
+stf_mysql:
+  image: 'mysql'
+  container_name: stf_mysql
+  volumes_from:
+    - stf_mysqldata
+  ports:
+    - "3306:3306"
+  environment:
+    - MYSQL_ROOT_PASSWORD=123456
+stf_redis:
+  image: 'redis'
+  container_name: stf_redis
+  ports:
+    - "6379:6379"
+  volumes_from:
+    - stf_redisdata
+  command: redis-server --appendonly yes

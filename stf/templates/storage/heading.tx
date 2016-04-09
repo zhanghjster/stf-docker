@@ -1,0 +1,28 @@
+<div class="well">
+    <h2>[% IF (storage) %]Storages [% storage.id %][% ELSE %]Storages[% END %]</h2>
+
+    <button id="stf-storage-create-btn" class="btn btn-success btn-mini"><i class="icon-plus icon-white"></i> Create</button>
+[% IF (storage) %]
+    <button id="stf-storage-edit-btn" class="btn btn-info btn-mini"><i class="icon-pencil icon-white"></i> Edit</button>
+[% END %]
+</div>
+
+<script type="text/javascript">
+<!--
+    $(document).ready( function() {
+        $("#stf-storage-create-btn").click(function() {
+            location.href = "/storage/add";
+            return false;
+        });
+[% IF (storage) %]
+        $("#stf-storage-edit-btn").click(function() {
+            location.href = "/storage/edit/[% storage.id %]";
+            return false;
+        });
+[% END %]
+    });
+-->
+</script>
+
+
+

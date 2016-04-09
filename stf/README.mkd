@@ -1,0 +1,86 @@
+# STF - Scalable, Simple Distributed Object Storage
+
+STF is a distributed object store (similar to MogileFS), which allows you to store billions of files on commodity hardware/software stack. It was developed at <a href="http://www.livedoor.com">livedoor Inc</a>, initially as sets of Apache modules, then eventually was ported to a native PSGI application.
+
+Among other things, it currently handles traffic for one of Japan's busiest blogging service, chugging 400Mbps of datas.
+
+STF is built on top of long trusted software like Apache (or nginx), Perl, Q4M (or TheSchwartz, Resque, Redis), MySQL, and Memcached, with open protocols so it's easy to maintain.
+
+=======
+
+## UPGRADING 
+
+### DATABASE SCHEMA
+
+If you were running STF 1.x, you must change your database schema:
+
+    # IT IS HIGHLY RECOMMENDED THAT YOU TEST THIS BEFORE
+    # RUNNING IT AGAINST A PRODUCTION DATABASE
+    # -- you've been warned
+
+    mysql stf ... < misc/stf-1.x-to-2.x.sql
+
+### WORKER SELF-BALANCING
+
+Since version 2.00, STF workers control the number of instances that should
+be fork+exec'ed on each drone: e.g. if you had 3 drones, and you set the
+config variable stf.drone.RepairObject.instances to 20, drones will spawn
+6, 6, and 8 RepairObject workers.
+
+Thus the old setting in your config.pl will no longer be respected.
+
+### CLUSTERED STORAGE
+
+Since version 2.00, STF requires that you setup your storage in "clusters".
+
+First you need to create clusters, and add storages to it. You can set this
+via the new admin interface, or by manual operation.
+
+    INSERT INTO storage_cluster ...;
+    UPDATE storage SET cluster_id = ... WHERE id = ...;
+
+There is no constraint from the system as to how many storages you should put 
+in a cluster, but in order to keep your data safe, you MUST have at least
+three storages per cluster. You also should have at least two clusters, but
+three or more is recommended.
+
+## Travis CI
+
+[![Build Status](https://secure.travis-ci.org/stf-storage/stf.png?branch=master)](http://travis-ci.org/stf-storage/stf)
+
+## Get STF
+
+    git clone git://github.com/stf-storage/stf.git
+    cd stf
+    cpanm --installdeps .
+
+## Setup
+
+Please read http://stf-storage.github.com/setup.html
+
+## Very simple usage via lwp-request
+
+    # create a bucket
+    lwp-request -m PUT http://stf-host/bucket
+    Please enter content (text/plain) to be PUTed:
+    # (Press Ctrl+D here so you don't send any content)
+
+    # create an object
+    lwp-request -m PUT http://stf-host/bucket/object
+    Please enter content (text/plain) to be PUTed:
+    # Type in random stuff here to be sent to the server
+
+    # get the object
+    lwp-request http://stf-host/bucket/object
+
+    # delete the object
+    lwp-request -m DELETE http://stf-host/bucket/object
+
+## See Also
+
+* Web site - http://stf-storage.github.com
+* Deploy STF on dotCloud - https://github.com/stf-storage/stf-on-dotcloud
+* STF::Dispatcher::PSGI - https://github.com/stf-storage/stf-dispatcher-psgi
+* Net::STF::Client - https://github.com/stf-storage/net-stf-client
+
+
