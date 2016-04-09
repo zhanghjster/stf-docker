@@ -28,7 +28,7 @@ run: dbdata
 
 	@echo start containers
 	@if [ $(shell docker ps | grep -ci stf) -eq 0 ]; then \
-		cd dev && docker-compose up -d ; \
+		docker-compose up -d ; \
 	fi
 
 stop: dbdata

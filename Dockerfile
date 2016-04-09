@@ -20,7 +20,7 @@ RUN cpanm -f Redis
 RUN cpanm -f Data::Dumper::Concise
 RUN cpanm -f Starlet
 COPY ./stf/cpanfile /cpanfile
-RUN cd / && cpanm -f installdeps .
+RUN cd / && cpanm -f --installdeps .
 
 # 配置ssh
 RUN mkdir -p /var/run/sshd
